@@ -21,6 +21,9 @@ bool isAnyObstaclePoint = true;
 
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
 
+/*
+  Thanks to AFMotor.h, DC motors can be controlled via a single port.
+*/
 AF_DCMotor rightMotor(2);
 AF_DCMotor leftMotor(1);
 
@@ -28,13 +31,21 @@ void setup() {
   servo.attach(9);
   servo.write(0);
   
-  rightMotor.setSpeed(200);
+  /*
+    Set base speed to 200 rpm.
+    We have to use our battery power more efficienty.
+  */
+  rightMotor.setSpeed(200); 
   leftMotor.setSpeed(200);
   
+  /*
+    RELEASE means in AFMotor.h library "Get ready motor to move."
+  */
   rightMotor.run(RELEASE);
   leftMotor.run(RELEASE);
   
-  Serial.begin(9600); // Open serial monitor at 115200 baud to see ping results.
+  Serial.begin(9600); 
+  // Open serial monitor at 9600 baud.
 }
 
 void loop() {
@@ -47,6 +58,10 @@ void loop() {
         saveData(sonar.ping_cm(), 0);
       } else if (dir == "LEFT") {
         saveData(-sonar.ping_cm(), 0);
+        //The reason for "-" is that we imagine the robot on the x-y coordinate.
+      } else {
+        //If there is no movement field, run the code again.
+        asm volatile("jmp 0");
       }
       
       goForward();
@@ -64,6 +79,10 @@ void loop() {
   if(Serial){
     for(int i = 0; i < sizeof(locations); i++) {
       Serial.write(locations[i]);
+      /*
+      The real trouble is here. Serial.write () does not have the ability to send the entire array at a time.
+      That's why we send each data separately.
+      */    
     }
     delay(5000);
   }
@@ -168,6 +187,9 @@ bool determineFuture(){
   int xDirection = 0;
   int yDirection = 0;
   
+  /*
+    Collect each x and y value. If 0 is out, we're back to where we started.
+  */
   for(int x = 0; x <= index; x = x+2){
     xDirection = xDirection + locations[x];
   }
@@ -177,6 +199,7 @@ bool determineFuture(){
   }
 
   if(xDirection == 0 && yDirection == 0) {
+    // We're back to the starting point.
     return true;
   }
   return false;
