@@ -50,17 +50,22 @@ void loop() {
       }
       
       goForward();
-      
-      if (determineFuture( == true)) {
+      if(determineFuture() == true) {
         isAnyObstaclePoint = false;
       }
   }
-  while(isSerialUnplug){
+  
+  while(isSerialUnplug == true){
     if(Serial){
-      Serial.begin(9600);
-      Serial.write(locations);
-      delay(5000);
+      isSerialUnplug == false;
     }
+  }
+
+  if(Serial){
+    for(int i = 0; i < sizeof(locations); i++) {
+      Serial.write(locations[i]);
+    }
+    delay(5000);
   }
 }
 
@@ -104,10 +109,12 @@ void goForward(){
   while(isFreeToMove(sonar.ping_cm())){
     rightMotor.run(FORWARD);
     leftMotor.run(FORWARD);
+    Serial.println("Forvard");
   }
 }
 
 void turnLeft(){
+  Serial.println("Left");
   rightMotor.run(FORWARD);
   leftMotor.run(BACKWARD);
   delay(1500);
@@ -116,6 +123,7 @@ void turnLeft(){
 }
 
 void turnRight(){
+  Serial.println("Right");
   rightMotor.run(BACKWARD);
   leftMotor.run(FORWARD);
   delay(1500);
