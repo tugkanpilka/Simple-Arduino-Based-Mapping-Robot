@@ -31,6 +31,23 @@
     <canvas id="renderCanvas" touch-action="none"></canvas> //touch-action="none" for best results from PEP
 
         <script>
+        var baseData = [];
+
+        var serialport = require('serialport');
+        var SerialPort = serialport.SerialPort;
+
+        var port = new SerialPort("COM3", {
+            baudrate: 9600,
+            parser: serialport.parsers.readline("\n")
+        });
+
+        port.on("open", function () {
+            console.log('open');
+            port.on('data', function(data) {
+                baseData.push(data);
+            });
+        });
+
         var createScene = function() {
             var scene = new BABYLON.Scene(engine);
         
@@ -127,8 +144,6 @@
                 return customMesh;
                 
             }
-            
-            var baseData = [-5, 0, 5, 0, 5, 6, 2, 6, 2, 9, -5, 9];
             
             var corners = [];
             for(b = 0; b < baseData.length/2; b++) {
