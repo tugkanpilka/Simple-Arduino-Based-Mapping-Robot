@@ -44,6 +44,7 @@ Library side requirements:
 |Node.js  | JavaScript|
 |NewPing.h  | Arduino|
 |Servo.h  | Arduino|
+|SerialPort  | JavaScript(Node.js)|
 
 
  Pin numbers are listed:
