@@ -1,7 +1,7 @@
 #DEPRECATED
 
 # Simple Leveled Arduino Sonar Mapping Robot
-*This project has been prepared by Tuğkan Pilka, Elif Özoğlu, İdil Yılmazer and Mert Mungan for Bahcesehir University's SEN2201 coded 'Programming Languages' course.
+
 Please feel free to contact us if you see any errors or would like to make a suggestion. Also note that the project is designed to be prepared in a very simple way.*
 
 ## The goal of the project
